@@ -318,9 +318,7 @@
         </div>
     </div>
     <div id="us-related-products" class="row">
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 us-item">
-        @include('card')
-        </div>
+
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 us-item">
             <div class="us-module-item  d-flex flex-column">
 
