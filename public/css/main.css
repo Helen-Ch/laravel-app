@@ -1547,7 +1547,7 @@ header {
 }
 
 .us-module-rating-star {
-  background: url(../img/star-grey.svg) no-repeat;
+  /*background: url(../img/star-grey.svg) no-repeat;*/
   width: 14px;
   height: 12px;
   display: inline-block;
@@ -1559,7 +1559,7 @@ header {
 }
 
 .us-module-rating-star-is {
-  background: url(../img/star.svg) no-repeat;
+  /*background: url(../img/star.svg) no-repeat;*/
 
 }
 .us-module-reviews {
