@@ -33,18 +33,8 @@ class MainController extends Controller
     public function product($category, $product = null)
     {
         // dump($product);
-        // dd($product);
+        // dd($product); - не положит в сессию
         // dd(\request());
         return view('product', ['product' => $product]);
-    }
-
-    public function basket()
-    {
-        return view('basket');
-    }
-
-    public function basketPlace()
-    {
-        return view('order');
     }
 }
