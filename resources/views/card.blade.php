@@ -36,7 +36,11 @@
 {{--        @isset($category)--}}
 {{--            {{ $category->name }}--}}
 {{--        @endisset--}}
-        <a href="{{ route('basket') }}" class="us-module-cart-btn button-cart">В корзину</a>
-        <a href="{{ route('product', [$product->category->code, $product->code]) }}" class="btn btn-success mb-2 mr-3 ml-3">Подробнее</a>
+        <form action="{{ route('basket-add', $product) }}" method="post">
+            <button type="submit" class="btn us-module-cart-btn button-cart" role="button">В корзину</button>
+            <a href="{{ route('product', [$product->category->code, $product->code]) }}" class="btn btn-success mb-2 mr-3 ml-3">Подробнее</a>
+            @csrf
+        </form>
+
     </div>
 
