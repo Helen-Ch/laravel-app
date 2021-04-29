@@ -15,8 +15,7 @@
         <div class="modal-body">
             <div class="us-cart-item us-cart-item-last text-center">
                 <div class="us-cart-text-modal">
-                    <p>В корзине <span>{{ $order->products->count() }} товаров</span> на сумму <span>5 168 грн</span></p>
-                    <a href="https://mm.kh.ua/index.php?route=checkout/simplecheckout" class="us-product-link">Перейти в корзину</a>
+                    <p>В корзине <span>{{ $order->products->count() }} товаров</span> на сумму <span>{{ $order->getFullPrice() }} грн</span></p>
                 </div>
             </div>
             <div class="us-modal-body-cart">
@@ -32,15 +31,22 @@
                                 </div>
                                 <div class="us-product-quantity">
                                     <div class="btn-group" role="group" aria-label="us-product-quantity">
+                                        <form action="{{ route('basket-remove', [$product->id]) }}" method="post">
+                                            <button type="submit" class="us-product-quantity-btn">-</button>
+                                            @csrf
+                                        </form>
+                                        <span class="badge">{{ $product->pivot->count }}</span>
                                         <form action="{{ route('basket-add', [$product->id]) }}" method="post">
-{{--                                        <button type="button" class="us-product-quantity-btn">-</button>--}}
-                                        <button type="submit" class="us-product-quantity-btn" >+</button>
+                                            <button type="submit" class="us-product-quantity-btn" >+</button>
                                             @csrf
                                         </form>
                                     </div>
                                 </div>
                                 <div class="us-cart-price-all">
-                                    {{ $product->price }}
+                                    Цена - {{ $product->price }} грн.
+                                </div>
+                                <div class="us-cart-price-all">
+                                    Cтоимость - {{ $product->getPriceForCount() }} грн.
                                 </div>
                             </div>
                         </div>
@@ -50,7 +56,9 @@
                     </div>
                 @endforeach
             </div>
-            <a href="/basket/place" class="us-module-btn us-module-btn-green">Оформить заказ</a>
+            @if ($order->products->count() > 0)
+                <a href="/basket/place" class="us-module-btn us-module-btn-green">Оформить заказ</a>
+            @endif
 
 
 
