@@ -17,49 +17,58 @@ class BasketController extends Controller
             $order = Order::findOrFail($orderId);
         }
 
-//        dd($order->id);
+        //  dd($order->id);
         return view('basket', compact('order'));
     }
 
+    public function basketConfirm()
+    {
+        
+    }
+
+
     public function basketPlace()
     {
-        return view('order');
+        $orderId = session('orderId');
+        if (is_null($orderId)) {
+            return  redirect()->route('main');
+        }
+        $order = Order::find($orderId);
+        return view('order', compact('order'));
     }
+
     public function basketAdd($productId)
     {
         $orderId = session('orderId');
         if (is_null($orderId)) {
-//            $order = Order::create()->id;
-//            dd($order);
-//            session(['orderId' => $order->id]);
             $order = Order::create();
-            session(['orderId' => $order]);
+            session(['orderId' => $order->id]);
         } else {
             $order = Order::find($orderId);
         }
 
         if ($order->products->contains($productId)) {
             $pivotRow = $order->products()->where('product_id', $productId)->first()->pivot;
-//            dd($pivotRow);
+            //  dd($pivotRow);
             $pivotRow->count++;
             $pivotRow->update();
-//             dd($pivotRow);
+            //  dd($pivotRow);
         } else {
             $order->products()->attach($productId);
 
         }
 
-//        dump($order->products);
-//        dump($order);
+        //  dump($order->products);
+        //  dump($order);
         return redirect()->route('basket');
     }
     public function basketRemove($productId)
     {
         $orderId = session('orderId');
         if (is_null($orderId)) {
-//            $orderId = Order::all()->first()->id;
-//            $order = Order::findOrFail($orderId);
-//            $order->products()->detach($productId);
+        //  $orderId = Order::all()->first()->id;
+        //  $order = Order::findOrFail($orderId);
+        //  $order->products()->detach($productId);
             return redirect()->route('basket');
         }
         $order = Order::find($orderId);

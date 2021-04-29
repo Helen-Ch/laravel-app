@@ -4,21 +4,17 @@
 
 @section('content')
 
-    <div class="modal-content">
+    <div class="modal-content mt-5">
         <div class="modal-header">
             <h5 class="modal-title" id="us-cart-modal">Корзина</h5>
-            <button type="button" class="us-close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true" class="us-modal-close-icon us-modal-close-left"></span>
-                <span aria-hidden="true" class="us-modal-close-icon us-modal-close-right"></span>
-            </button>
         </div>
         <div class="modal-body">
-            <div class="us-cart-item us-cart-item-last text-center">
+            <div class="us-cart-item-last text-center">
                 <div class="us-cart-text-modal">
                     <p>В корзине <span>{{ $order->products->count() }} товаров</span> на сумму <span>{{ $order->getFullPrice() }} грн</span></p>
                 </div>
             </div>
-            <div class="us-modal-body-cart">
+            <div class="">
                 @foreach($order->products as $product)
                     <div class="us-cart-item d-flex align-items-center justify-content-between">
                         <div class="us-cart-item-left d-flex align-items-center">
@@ -57,7 +53,7 @@
                 @endforeach
             </div>
             @if ($order->products->count() > 0)
-                <a href="/basket/place" class="us-module-btn us-module-btn-green">Оформить заказ</a>
+                <a href="{{ route('basket-place') }}" class="us-module-btn us-module-btn-green mt-5">Оформить заказ</a>
             @endif
 
 
