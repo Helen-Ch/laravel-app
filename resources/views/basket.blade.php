@@ -1,25 +1,20 @@
-@extends('master', ['id' => 'simplecheck', 'class' => 'flex-container'])
+@extends('layouts.master', ['id' => 'simplecheck', 'class' => 'flex-container'])
 
 @section('title', 'Корзина')
 
 @section('content')
 
-    <div class="modal-content">
+    <div class="modal-content mt-5">
         <div class="modal-header">
             <h5 class="modal-title" id="us-cart-modal">Корзина</h5>
-            <button type="button" class="us-close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true" class="us-modal-close-icon us-modal-close-left"></span>
-                <span aria-hidden="true" class="us-modal-close-icon us-modal-close-right"></span>
-            </button>
         </div>
         <div class="modal-body">
-            <div class="us-cart-item us-cart-item-last text-center">
+            <div class="us-cart-item-last text-center">
                 <div class="us-cart-text-modal">
-                    <p>В корзине <span>{{ $order->products->count() }} товаров</span> на сумму <span>5 168 грн</span></p>
-                    <a href="https://mm.kh.ua/index.php?route=checkout/simplecheckout" class="us-product-link">Перейти в корзину</a>
+                    <p>В корзине <span>{{ $order->products->count() }} товаров</span> на сумму <span>{{ $order->getFullPrice() }} грн</span></p>
                 </div>
             </div>
-            <div class="us-modal-body-cart">
+            <div class="">
                 @foreach($order->products as $product)
                     <div class="us-cart-item d-flex align-items-center justify-content-between">
                         <div class="us-cart-item-left d-flex align-items-center">
@@ -32,15 +27,22 @@
                                 </div>
                                 <div class="us-product-quantity">
                                     <div class="btn-group" role="group" aria-label="us-product-quantity">
+                                        <form action="{{ route('basket-remove', [$product->id]) }}" method="post">
+                                            <button type="submit" class="us-product-quantity-btn">-</button>
+                                            @csrf
+                                        </form>
+                                        <span class="badge">{{ $product->pivot->count }}</span>
                                         <form action="{{ route('basket-add', [$product->id]) }}" method="post">
-{{--                                        <button type="button" class="us-product-quantity-btn">-</button>--}}
-                                        <button type="submit" class="us-product-quantity-btn" >+</button>
+                                            <button type="submit" class="us-product-quantity-btn" >+</button>
                                             @csrf
                                         </form>
                                     </div>
                                 </div>
                                 <div class="us-cart-price-all">
-                                    {{ $product->price }}
+                                    Цена - {{ $product->price }} грн.
+                                </div>
+                                <div class="us-cart-price-all">
+                                    Cтоимость - {{ $product->getPriceForCount() }} грн.
                                 </div>
                             </div>
                         </div>
@@ -50,7 +52,9 @@
                     </div>
                 @endforeach
             </div>
-            <a href="/basket/place" class="us-module-btn us-module-btn-green">Оформить заказ</a>
+            @if ($order->products->count() > 0)
+                <a href="{{ route('basket-place') }}" class="us-module-btn us-module-btn-green mt-5">Оформить заказ</a>
+            @endif
 
 
 

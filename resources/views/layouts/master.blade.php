@@ -260,6 +260,11 @@
     </div>
 </div>
 <div id="{{ $id ?? '' }}" class="container {{ $class ?? '' }}">
+    @if(session()->has('success'))
+        <p class="alert alert-success">{{ session()->get('success') }}</p>
+    @elseif(session()->has('warning'))
+        <p class="alert alert-warning">{{ session()->get('warning') }}</p>
+    @endif
     @yield('content')
 </div>
 

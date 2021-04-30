@@ -1,4 +1,4 @@
-@extends('master', ['id' => 'information-information', 'class' => 'flex-container'])
+@extends('layouts.master', ['id' => 'information-information', 'class' => 'flex-container'])
 
 @section('title', 'Все категории товаров')
 

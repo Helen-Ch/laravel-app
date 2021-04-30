@@ -1,4 +1,4 @@
-@extends('master', ['id' => 'product-category', 'class' => $category->code])
+@extends('layouts.master', ['id' => 'product-category', 'class' => $category->code])
 
 @section('title', 'Категория' . $category->name)
 
@@ -65,7 +65,7 @@
 {{--                @foreach($products as $product)--}}
                 @foreach($category->products as $product)
                 <div class="product-layout product-grid col-sm-4">
-                    @include('card', compact('product'))
+                    @include('layouts.card', compact('product'))
                 </div>
                 @endforeach
             </div>
