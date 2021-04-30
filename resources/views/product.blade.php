@@ -1,4 +1,4 @@
-@extends('master', ['id' => 'product-product'])
+@extends('layouts.master', ['id' => 'product-product'])
 
 @section('title', 'Товар')
 

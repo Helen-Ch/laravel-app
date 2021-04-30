@@ -1,4 +1,4 @@
-@extends('master',['id' => 'common-home'])
+@extends('layouts.master',['id' => 'common-home'])
 
 @section('title', 'Мобильный Мир © магазин мобильных телефонов и аксессуаров в Харькове')
 
@@ -222,7 +222,7 @@
 <div id="us-pfc-0" class="row">
     @foreach($products as $product)
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-            @include('card', compact($product))
+            @include('layouts.card', compact($product))
     </div>
     @endforeach
 

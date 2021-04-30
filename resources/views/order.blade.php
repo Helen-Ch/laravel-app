@@ -1,4 +1,4 @@
-@extends('master', ['id' => 'simplecheck', 'class' => 'flex-container'])
+@extends('layouts.master', ['id' => 'simplecheck', 'class' => 'flex-container'])
 
 @section('title', 'Оформить заказ')
 
