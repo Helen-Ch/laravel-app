@@ -1,46 +1,17 @@
-
-    <div class="us-module-item d-flex flex-column">
-
-        <div class="us-module-img">
-            <a href="#">
-                <img src="https://mm.kh.ua/image/cache/catalog/samsung/39299-200x200.jpg"
-                     alt="{{ $product->name }}"
-                     title="{{ $product->name }}" class="img-fluid"/>
-            </a>
+<div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+        <img src="{{asset('products/iphone_x.jpg')}}" alt="iPhone X 64GB">
+        <div class="caption">
+            <h3>{{ $product->name }}</h3>
+            <p>{{ $product->price }} руб.</p>
+            <p>
+            <form action="{{ route('basket-add', $product) }}" method="POST">
+                <button type="submit" class="btn btn-primary" role="button">В корзину</button>
+                <a href="{{ route('product', [$product->category->code, $product->code]) }}" class="btn btn-default"
+                   role="button">Подробнее</a>
+                @csrf
+            </form>
+            </p>
         </div>
-        <div class="us-module-title flex-grow-1">
-            <a href="#">{{ $product->name }}</a>
-        </div>
-
-        <div class="us-module-model"><span class="mdls">Код товара: <span class="mod">39299</span></span></div>
-
-        <div class="us-module-rating d-flex align-items-center justify-content-center">
-            <div class="us-module-rating-stars d-flex align-items-center">
-                <span class="us-module-rating-star"></span>
-                <span class="us-module-rating-star"></span>
-                <span class="us-module-rating-star"></span>
-                <span class="us-module-rating-star"></span>
-                <span class="us-module-rating-star"></span>
-            </div>
-            <div class="us-module-reviews">
-                <i class="fas fa-comment">
-                    <span>0</span>
-                </i>
-            </div>
-        </div>
-        <div class="us-module-price">
-            <span class="us-module-price-actual">{{ $product->price }}</span>
-        </div>
-        {{ $product->category->name }}
-{{--        {{ $product->getCategory()->name }}--}}
-{{--        @isset($category)--}}
-{{--            {{ $category->name }}--}}
-{{--        @endisset--}}
-        <form action="{{ route('basket-add', $product) }}" method="post">
-            <button type="submit" class="btn us-module-cart-btn button-cart" role="button">В корзину</button>
-            <a href="{{ route('product', [$product->category->code, $product->code]) }}" class="btn btn-success mb-2 mr-3 ml-3">Подробнее</a>
-            @csrf
-        </form>
-
     </div>
-
+</div>

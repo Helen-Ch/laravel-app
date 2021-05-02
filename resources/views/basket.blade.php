@@ -3,63 +3,58 @@
 @section('title', 'Корзина')
 
 @section('content')
-
-    <div class="modal-content mt-5">
-        <div class="modal-header">
-            <h5 class="modal-title" id="us-cart-modal">Корзина</h5>
-        </div>
-        <div class="modal-body">
-            <div class="us-cart-item-last text-center">
-                <div class="us-cart-text-modal">
-                    <p>В корзине <span>{{ $order->products->count() }} товаров</span> на сумму <span>{{ $order->getFullPrice() }} грн</span></p>
-                </div>
-            </div>
-            <div class="">
-                @foreach($order->products as $product)
-                    <div class="us-cart-item d-flex align-items-center justify-content-between">
-                        <div class="us-cart-item-left d-flex align-items-center">
-                            <img src="https://mm.kh.ua/image/cache/catalog/samsung/39299-70x95.jpg" class="us-cart-item-img" alt="Samsung Galaxy A01 Core 2020 A013F 1/16GB Black (SM-A013FZKDSEK)">
-                            <div class="us-cart-item-desc">
-                                <div class="mb-3">
-                                    <a href="{{ route('product', [$product->category->code, $product->code]) }}" class="us-cart-item-link">
-                                        {{ $product->name }}
-                                    </a>
-                                </div>
-                                <div class="us-product-quantity">
-                                    <div class="btn-group" role="group" aria-label="us-product-quantity">
-                                        <form action="{{ route('basket-remove', [$product->id]) }}" method="post">
-                                            <button type="submit" class="us-product-quantity-btn">-</button>
-                                            @csrf
-                                        </form>
-                                        <span class="badge">{{ $product->pivot->count }}</span>
-                                        <form action="{{ route('basket-add', [$product->id]) }}" method="post">
-                                            <button type="submit" class="us-product-quantity-btn" >+</button>
-                                            @csrf
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="us-cart-price-all">
-                                    Цена - {{ $product->price }} грн.
-                                </div>
-                                <div class="us-cart-price-all">
-                                    Cтоимость - {{ $product->getPriceForCount() }} грн.
-                                </div>
-                            </div>
+    <h1>Корзина</h1>
+    <p>Оформление заказа</p>
+    <div class="panel">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>Стоимость</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($order->products as $product)
+                <tr>
+                    <td>
+                        <a href="{{ route('product', [$product->category->code, $product->code]) }}">
+                            <img height="56px" src="http://laravel-diplom-1.rdavydov.ru/storage/products/iphone_x.jpg">
+                            {{ $product->name }}
+                        </a>
+                    </td>
+                    <td><span class="badge">{{ $product->pivot->count }}</span>
+                        <div class="btn-group form-inline">
+                            <form action="{{ route('basket-remove', $product) }}" method="POST">
+                                <button type="submit" class="btn btn-danger"
+                                        href=""><span
+                                            class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                @csrf
+                            </form>
+                            <form action="{{ route('basket-add', $product) }}" method="POST">
+                                <button type="submit" class="btn btn-success"
+                                        href=""><span
+                                            class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                @csrf
+                            </form>
                         </div>
-                        <a href="javascript:;" onclick="remove(this, 'remove'); return false;" class="us-cart-del"><i class="fas fa-trash-alt"></i></a>
-                        <input name="product_key" value="10735" style="display: none;" hidden="">
-                        <input name="product_id_q" value="10637" style="display: none;" hidden="">
-                    </div>
-                @endforeach
-            </div>
-            @if ($order->products->count() > 0)
-                <a href="{{ route('basket-place') }}" class="us-module-btn us-module-btn-green mt-5">Оформить заказ</a>
-            @endif
-
-
-
+                    </td>
+                    <td>{{ $product->price }} руб.</td>
+                    <td>{{ $product->getPriceForCount() }} руб.</td>
+                </tr>
+            @endforeach
+            <tr>
+                <td colspan="3">Общая стоимость:</td>
+                <td>{{ $order->getFullPrice() }} руб.</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="btn-group pull-right" role="group">
+            <a type="button" class="btn btn-success" href="{{ route('basket-place') }}">Оформить
+                заказ</a>
         </div>
     </div>
-
-
 @endsection
+© 2021 GitHub, Inc.
