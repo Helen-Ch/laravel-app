@@ -27,8 +27,11 @@ require __DIR__ . '/auth.php';
 Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('get-logout');
 Route::group([
     'middleware' => 'is_admin',
+    'namespace' => 'App\Http\Controllers\Admin',
+    'prefix' => 'admin',
 ], function () {
-    Route::get('/orders', 'App\Http\Controllers\Admin\OrderController@index')->name('home');
+    Route::get('/orders', 'OrderController@index')->name('home');
+    Route::resource('categories', 'CategoryController');
 });
 
 Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
