@@ -17,18 +17,16 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-/*Route::get('/', function () {
-    return view('main');
-});
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::get('/categories', function () {
-    return view('categories');
-});
+require __DIR__ . '/auth.php';
 
-Route::get('/samsung/samsung-galaxy-a01-core-2020', function () {
-    return view('product');
-});
-*/
+
+Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('get-logout');
+Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+
 
 Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
 
@@ -42,4 +40,6 @@ Route::post('/basket/place', 'App\Http\Controllers\BasketController@basketConfir
 Route::get('/categories', 'App\Http\Controllers\MainController@categories')->name('categories');
 Route::get('/{category}', 'App\Http\Controllers\MainController@category')->name('category');
 Route::get('/{category}/{product?}', 'App\Http\Controllers\MainController@product')->name('product');
+Auth::routes();
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

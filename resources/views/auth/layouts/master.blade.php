@@ -15,9 +15,9 @@
     {{--    <base href="/" />--}}
     <link href="/css/bootstrap-reboot.min.css" type="text/css" rel="stylesheet" media="screen"/>
     <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen"/>
-    {{--    <link href="/fontawesome-free-5.6.1-web/css/all.css" type="text/css" rel="stylesheet" media="screen"/>--}}
+{{--    <link href="/fontawesome-free-5.6.1-web/css/all.css" type="text/css" rel="stylesheet" media="screen"/>--}}
     <link href="/css/owl.carousel.min.css" type="text/css" rel="stylesheet" media="screen"/>
-    {{--    <link href="/css/fonts.css" type="text/css" rel="stylesheet" media="screen"/>--}}
+{{--    <link href="/css/fonts.css" type="text/css" rel="stylesheet" media="screen"/>--}}
     <link href="/css/main.css" type="text/css" rel="stylesheet" media="screen"/>
     <link href="/css/responsive.css" type="text/css" rel="stylesheet" media="screen"/>
     <link href="/css/dynamic_stylesheet.css" type="text/css" rel="stylesheet" media="screen"/>
@@ -121,24 +121,23 @@
         </div>
         <div id="top-links" class="nav ml-auto d-flex">
             @guest
-                <div>
-                    <a href="{{ route('login') }}" title="Панель администратора"
-                       class="btn btn-user btn-link btn-block h-100" role="button">
-                        <span class="hidden-xs">Панель администратора</span></a>
-                </div>
-
+            <div>
+                <a href="{{ route('login') }}" title="Войти"
+                   class="btn btn-user btn-link btn-block h-100" role="button">
+                    <span class="hidden-xs">Войти</span></a>
+            </div>
+            <div>
+                <a href="{{ route('register') }}" title="Зарегистрироваться"
+                   class="btn btn-user btn-link btn-block h-100" role="button">
+                    <span class="hidden-xs">Зарегистрироваться</span></a>
+            </div>
             @endguest
             @auth
-                <div>
-                    <a href="{{ route('home') }}" title="Панель администратора"
-                       class="btn btn-user btn-link btn-block h-100" role="button">
-                        <span class="hidden-xs">Панель администратора</span></a>
-                </div>
-                <div>
-                    <a href="{{ route('get-logout') }}" title="Выйти"
-                       class="btn btn-user btn-link btn-block h-100" role="button">
-                        <span class="hidden-xs">Выйти</span></a>
-                </div>
+            <div>
+                <a href="{{ route('get-logout') }}" title="Выйти"
+                   class="btn btn-user btn-link btn-block h-100" role="button">
+                    <span class="hidden-xs">Выйти</span></a>
+            </div>
             @endauth
         </div>
 
@@ -149,10 +148,10 @@
         <div class="row align-items-center">
             <div id="logo" class="col-6 col-lg-3 col-md-3 us-logo-box text-center">
                 <a href="{{ route('main') }}">
-                    <img src="https://mm.kh.ua//image/catalog/logo_mobile.png"
-                         title="Мобильный мир - Мобильный Мир © магазин мобильных телефонов и аксессуаров в Харькове"
-                         alt="Мобильный мир - Мобильный Мир © магазин мобильных телефонов и аксессуаров в Харькове"
-                         class="us-logo-img"/>
+                <img src="https://mm.kh.ua//image/catalog/logo_mobile.png"
+                     title="Мобильный мир - Мобильный Мир © магазин мобильных телефонов и аксессуаров в Харькове"
+                     alt="Мобильный мир - Мобильный Мир © магазин мобильных телефонов и аксессуаров в Харькове"
+                     class="us-logo-img"/>
                 </a>
             </div>
 
@@ -269,7 +268,7 @@
 
 
     <div id="us_fixed_contact_substrate"></div>
-
+   
     <div class="container footer-sub">
 
         <div class="row">
@@ -344,9 +343,7 @@
             <div class="col-lg-3 col-md-6 us-footer-box">
                 <div class="us-footer-title">Наши контакты<i class="fas fa-chevron-down d-md-none"></i></div>
                 <div class="us-footer-list us-footer-contact-box">
-                    <a class="btn us-footer-phone-btn top-phone-btn dropdown-toggle d-flex align-items-center" href="#"
-                       role="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">(095) 047-47-48
+                    <a class="btn us-footer-phone-btn top-phone-btn dropdown-toggle d-flex align-items-center" href="#" role="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">(095) 047-47-48
                         <i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu header-dropdown-menu" aria-labelledby="dropdownMenu5">
                         <li><a href="tel:0950474748
