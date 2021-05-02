@@ -8,7 +8,7 @@
     <title>Админка: @yield('title')</title>
 
     <!-- Scripts -->
-    <script src="/js/app.js" defer></script>
+    <script src="/js/app-lesson.js" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -17,7 +17,7 @@
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/admin.css" rel="stylesheet">
+{{--    <link href="/css/admin.css" rel="stylesheet">--}}
 </head>
 <body>
 <div id="app">
