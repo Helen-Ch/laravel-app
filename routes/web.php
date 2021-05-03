@@ -15,23 +15,23 @@ use Illuminate\Support\Facades\Route;
 
 /*Route::get('/', function () {
     return view('welcome');
-});*/
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
-
-require __DIR__ . '/auth.php';
-
+*/
+require __DIR__. '/auth.php';
 
 Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('get-logout');
 Route::group([
-    'middleware' => 'is_admin',
-    'namespace' => 'App\Http\Controllers\Admin',
-    'prefix' => 'admin',
-], function () {
+                 'middleware' => 'is_admin',
+                 'namespace' => 'App\Http\Controllers\Admin',
+                 'prefix' => 'admin',
+             ], function () {
     Route::get('/orders', 'OrderController@index')->name('home');
     Route::resource('categories', 'CategoryController');
+    Route::resource('products', 'ProductController');
 });
 
 Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
@@ -50,6 +50,3 @@ Route::group(['prefix' => 'basket'], function () {
 Route::get('/categories', 'App\Http\Controllers\MainController@categories')->name('categories');
 Route::get('/{category}', 'App\Http\Controllers\MainController@category')->name('category');
 Route::get('/{category}/{product?}', 'App\Http\Controllers\MainController@product')->name('product');
-
-
-
