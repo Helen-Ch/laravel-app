@@ -32,6 +32,7 @@ Route::group([
 ], function () {
     Route::get('/orders', 'OrderController@index')->name('home');
     Route::resource('categories', 'CategoryController');
+    Route::resource('products', 'ProductController');
 });
 
 Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
@@ -50,6 +51,3 @@ Route::group(['prefix' => 'basket'], function () {
 Route::get('/categories', 'App\Http\Controllers\MainController@categories')->name('categories');
 Route::get('/{category}', 'App\Http\Controllers\MainController@category')->name('category');
 Route::get('/{category}/{product?}', 'App\Http\Controllers\MainController@product')->name('product');
-
-
-
