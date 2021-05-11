@@ -50,3 +50,5 @@ Route::group(['prefix' => 'basket'], function () {
 Route::get('/categories', 'App\Http\Controllers\MainController@categories')->name('categories');
 Route::get('/{category}', 'App\Http\Controllers\MainController@category')->name('category');
 Route::get('/{category}/{product?}', 'App\Http\Controllers\MainController@product')->name('product');
+
+Route::resource('reviews', 'App\Http\Controllers\ReviewController');
