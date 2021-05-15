@@ -18,17 +18,18 @@
         <form action="{{ route('reviews.store', $product) }}" method="post">
             @csrf
                 <div class="form-group">
-                    @error('name')
+                    @error('author')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                    <input type="text" name="author" class="form-control" id="name" placeholder="Ваше имя">
+                    <input type="text" name="author" class="form-control"placeholder="Ваше имя"
+                            value="{{ old('code', isset($review) ? $review->author : null) }}">
                 </div>
 
                 <div class="form-group">
                     @error('text')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                    <textarea name="text" class="form-control" id="review" rows="3"></textarea>
+                    <textarea name="text" class="form-control" rows="3"></textarea>
                 </div>
             <button class="btn btn-success">Отправить</button>
         </form>

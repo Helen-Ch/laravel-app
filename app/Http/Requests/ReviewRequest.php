@@ -23,8 +23,18 @@ class ReviewRequest extends FormRequest
      */
     public function rules()
     {
+        return $rules = [
+            'author' => 'required|min:3|max:255|regex:/\d\w/i',
+            'text' => 'required|min:50|max:255'
+        ];
+    }
+
+    public function messages()
+    {
         return [
-            //
+            'required' => 'Поле :attribute обязательно для заполнения',
+            'min' => 'Поле :attribute должно иметь минимум :min символов',
+            'author.regex' => 'Поле имя должно содержать только буквы и цифры'
         ];
     }
 }
