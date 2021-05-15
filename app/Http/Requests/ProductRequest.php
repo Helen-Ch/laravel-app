@@ -24,13 +24,13 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'code' => 'required|min:3|max:255|unique:products,code',
+            'code' => 'required|min:3|max:255|unique:products,code',// уникальное поле code для таблицы products
             'name' => 'required|min:3|max:255',
             'description' => 'required|min:5',
             'price' => 'required|numeric min:1'
         ];
         if ($this->route()->named('products.update')) {
-            $rules['code'] .= ',' . $this->route()->parameter('product')->id;
+            $rules['code'] .= ',' . $this->route()->parameter('product')->id;// уникальное поле code для таблицы products, за исключением id этого продукта
         }
         return $rules;
     }

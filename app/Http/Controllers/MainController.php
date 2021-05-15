@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -32,9 +33,14 @@ class MainController extends Controller
 
     public function product($category, $product = null)
     {
+        // dd($product);
         // dump($product);
         // dd($product); - не положит в сессию
         // dd(\request());
+        // $reviews = Review::get();
+        $product = Product::where('code', $product)->first();
+        //$reviews = Review::where('product_id', $product_id)->get();
+        // dd($product->reviews);
         return view('product', ['product' => $product]);
     }
 }

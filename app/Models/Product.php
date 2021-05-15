@@ -11,7 +11,7 @@ class Product extends Model
 
     /*public function getCategory()
     {
-        //  $category = Category::where('id', $this->category_id)->get()->first(); // возвращает коллекцию
+        //  $category = Category::where('id', $this->category_id)->get()->first(); // возвращает экземпляр коллекции, без [0]
         return $category = Category::find($this->category_id); // возвращает 1-й эл-т
         //  dd($category);
     }*/
@@ -28,5 +28,10 @@ class Product extends Model
            return $this->pivot->count * $this->price;
        }
        return $this->price;
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
