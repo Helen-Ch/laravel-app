@@ -18,10 +18,12 @@ class CheckIsAdmin
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
+
         if (!$user->isAdmin()) {
             session()->flash('warning', 'У вас нет прав админитратора!');
             return  redirect()->route('main');
         }
+
         return $next($request);
     }
 }

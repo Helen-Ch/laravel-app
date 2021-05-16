@@ -2,16 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductsFilterRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
-    public function index()
+    public function index(ProductsFilterRequest $request)
     {
-        $products = Product::get();
+        // dd($request->all()); //увидеть, какие параметры пришли а гет
+        //$products = Product::get();
+        // lesson 17
+        $productsQuery = Product::query();
+        if ($request->filled('price_from')) {
+            $productsQuery->where('price', '>=', $request->price_from);
+        }
+
+        if ($request->filled('price_to')) {
+            $productsQuery->where('price', '<=', $request->price_to);
+        }
+
+        foreach (['hit', 'new', 'recommend'] as $field) {
+            if ($request->has($field)) {
+                $productsQuery->where($field, 1);
+            }
+        }
+
+        $products = $productsQuery->paginate(6)->withQueryString();
         return view('main', compact('products'));
     }
 
@@ -28,7 +48,6 @@ class MainController extends Controller
         //  dd($category);
         //  return view('category', compact('category', 'products'));
         return view('category', compact('category'));
-
     }
 
     public function product($category, $product = null)
@@ -42,5 +61,16 @@ class MainController extends Controller
         //$reviews = Review::where('product_id', $product_id)->get();
         // dd($product->reviews);
         return view('product', ['product' => $product]);
+    }
+
+    protected function redirectTo()
+    {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->route('home');
+        } elseif (count(Auth::user()->orders()->where('status', 1)->get()) > 0) {
+            return redirect()->route('person.orders.index');
+        } else {
+            return redirect()->route('main');
+        }
     }
 }
