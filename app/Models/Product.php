@@ -9,6 +9,9 @@ class Product extends Model
 {
     use HasFactory;
 
+    // lesson 19 error for debug
+    // protected $table = 'product'; // неправильное название таблицы products
+
     /*public function getCategory()
     {
         //  $category = Category::where('id', $this->category_id)->get()->first(); // возвращает экземпляр коллекции, без [0]
@@ -39,6 +42,19 @@ class Product extends Model
     public function setNewAttribute($value)
     {
         $this->attributes['new'] = $value === 'on' ? 1 : 0;
+    }
+
+    // lesson 20
+    public function scopeHit($query) {
+        return $query->where('hit', 1);
+    }
+
+    public function scopeNew($query) {
+        return $query->where('new', 1);
+    }
+
+    public function scopeRecommend($query) {
+        return $query->where('recommend', 1);
     }
 
     public function setHitAttribute($value)

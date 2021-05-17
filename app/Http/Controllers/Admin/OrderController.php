@@ -28,7 +28,9 @@ class OrderController extends Controller
     {
         // $orders = Order::where('status', 1)->get();
         // lesson 17
-        $orders = Order::where('status', 1)->paginate(1);
+        // $orders = Order::where('status', 1)->paginate(10);
+        // lesson 20
+        $orders = Order::active()->paginate(10);
 
         //  return view('home');
         return view('auth.orders.index', compact('orders'));
