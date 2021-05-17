@@ -21,7 +21,7 @@ class MainController extends Controller
         // \Log::channel('daily')->info($request->ip());
         // \Log::channel('daily')->error($request->ip());
         // \Log::channel('daily')->debug($request->ip());
-        Debugbar::info('my info again');
+        // Debugbar::info('my info again');
 
         // lesson 17
         // dd($request->all()); //увидеть, какие параметры пришли а гет
@@ -38,9 +38,12 @@ class MainController extends Controller
             $productsQuery->where('price', '<=', $request->price_to);
         }
 
+        // Lesson 18
         foreach (['hit', 'new', 'recommend'] as $field) {
             if ($request->has($field)) {
-                $productsQuery->where($field, 1);
+                // $productsQuery->where($field, 1);
+                // lesson 20
+                $productsQuery->$field();
             }
         }
 

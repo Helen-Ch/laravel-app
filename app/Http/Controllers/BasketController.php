@@ -39,6 +39,9 @@ class BasketController extends Controller
         } else {
             session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');
         }
+
+        Order::eraseOrderSum();
+
         return redirect()->route('main');
     }
 
@@ -81,6 +84,10 @@ class BasketController extends Controller
 
 
         $product = Product::find($productId);
+
+        // lesson 20
+        Order::changeFullSum($product->price);
+
         session()->flash('success', 'Добавлен товар ' . $product->name);
 
         //  dump($order->products);
@@ -109,6 +116,10 @@ class BasketController extends Controller
         }
 
         $product = Product::find($productId);
+
+        // lesson 20
+        Order::changeFullSum(-$product->price);
+
         session()->flash('warning', 'Удален товар ' . $product->name);
         return redirect()->route('basket');
     }
