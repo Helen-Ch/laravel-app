@@ -9,6 +9,9 @@ class Product extends Model
 {
     use HasFactory;
 
+    // lesson 19 error for debug
+    // protected $table = 'product'; // неправильное название таблицы products
+
     /*public function getCategory()
     {
         //  $category = Category::where('id', $this->category_id)->get()->first(); // возвращает экземпляр коллекции, без [0]
