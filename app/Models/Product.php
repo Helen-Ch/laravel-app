@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     // lesson 19 error for debug
     // protected $table = 'product'; // неправильное название таблицы products
@@ -19,7 +21,7 @@ class Product extends Model
         //  dd($category);
     }*/
 
-    protected $fillable = ['category_id', 'name', 'code', 'description', 'image', 'price', 'hit', 'new', 'recommend'];
+    protected $fillable = ['category_id', 'name', 'code', 'description', 'image', 'price', 'hit', 'new', 'recommend', 'count'];
 
     public function category()
     {
@@ -80,6 +82,17 @@ class Product extends Model
     public function isRecommend()
     {
         return $this->recommend === 1;
+    }
+
+    // lesson 22
+    public function isAvailable()
+    {
+        return !$this->trashed() && $this->count > 0;
+    }
+
+    public function scopeByCode($query, $code)
+    {
+        return $query->where('code', $code);
     }
 
 }
