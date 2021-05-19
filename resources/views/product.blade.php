@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>{{ $product->name }}</h1>
-    <h2>{{ $product->code }}</h2>
+    <h2>{{ $product->category->name }}</h2>
     <p>Цена: <b>{{ $product->price }} руб.</b></p>
     <div>
         <div class="thumbnail" style="max-width: 25%; margin: 0 auto;">
@@ -12,7 +12,11 @@
         </div>
     </div>
     <p>{{ $product->description }}</p>
-    <a class="btn btn-success" href="{{ route('basket-add', $product->code) }}">Добавить в корзину</a>
+    @if($product->isAvailable())
+        <a class="btn btn-success" href="{{ route('basket-add', $product->code) }}">Добавить в корзину</a>
+    @else
+        <button type="button" class="btn btn-info" role="button" disabled>Нет в наличии</button>
+    @endif
     <div  style="max-width: 50%; margin: 0 auto;">
         <p class="text-left">Оставьте свой отзыв:</p>
         <form action="{{ route('reviews.store', $product) }}" method="post">

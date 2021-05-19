@@ -66,16 +66,22 @@ class MainController extends Controller
         return view('category', compact('category'));
     }
 
-    public function product($category, $product = null)
+    public function product($category, $productCode)
     {
         // dd($product);
         // dump($product);
         // dd($product); - не положит в сессию
         // dd(\request());
         // $reviews = Review::get();
-        $product = Product::where('code', $product)->first();
+
+        //$product = Product::where('code', $product)->first();
+
         //$reviews = Review::where('product_id', $product_id)->get();
         // dd($product->reviews);
+
+        // lesson 22
+        $product = Product::withTrashed()->byCode($productCode)->first();
+
         return view('product', ['product' => $product]);
     }
 
