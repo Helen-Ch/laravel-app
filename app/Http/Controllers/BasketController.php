@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Basket;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -11,33 +12,44 @@ class BasketController extends Controller
 {
     public function basket()
     {
-        $orderId = session('orderId');
-        if (!is_null($orderId)) {
+        $order = (new Basket())->getOrder();
+
+        // $orderId = session('orderId');
+        // lesson 23 убираем эту проверку, т.к. она есть в middleware
+        /*if (!is_null($orderId)) {
             $order = Order::findOrFail($orderId);
         } /*else {
             $orderId = Order::all()->first()->id;
             $order = Order::findOrFail($orderId);
         }*/
-
+        // $order = Order::findOrFail($orderId);
         //  dd($order->id);
         return view('basket', compact('order'));
     }
 
     public function basketConfirm(Request $request)
     {
-        $orderId = session('orderId');
-        if (is_null($orderId)) {
+        // $orderId = session('orderId');
+        /*if (is_null($orderId)) {
             return  redirect()->route('main');
-        }
-        $order = Order::find($orderId);
+        }*/
+        // $order = Order::findOrFail($orderId);
         // dd($request->all());
         // dd($request->name);
-        $success = $order->saveOrder($request->name, $request->phone);
+        // $success = $order->saveOrder($request->name, $request->phone);
 
-        if ($success) {
+        /*if ($success) {
             session()->flash('success', 'Ваш заказ принят в обработку!');
         } else {
             session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');
+        }*/
+
+        // lesson 23
+        if ((new Basket())->saveOrder($request->name, $request->phone)) {
+            session()->flash('success', 'Ваш заказ принят в обработку!');
+        } else {
+            // session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');
+            session()->flash('warning', 'Товар не доступен для заказа в полном объеме');
         }
 
         Order::eraseOrderSum();
@@ -48,77 +60,93 @@ class BasketController extends Controller
 
     public function basketPlace()
     {
-        $orderId = session('orderId');
-        if (is_null($orderId)) {
+        // $orderId = session('orderId');
+        /*if (is_null($orderId)) {
             return  redirect()->route('main');
+        }*/
+        // $order = Order::findOrFail($orderId);
+        $basket = new Basket();
+        $order = $basket->getOrder();
+        if (!$basket->countAvailable()) {
+            session()->flash('warning', 'Товар не доступен для заказа в полном объеме');
+            return redirect()->route('basket');
         }
-        $order = Order::find($orderId);
+
         return view('order', compact('order'));
     }
 
-    public function basketAdd($productId)
+    public function basketAdd(Product $product/*$productId*/)
     {
-        $orderId = session('orderId');
+        $result = (new Basket(true))->addProduct($product);
+        /*$orderId = session('orderId');
         if (is_null($orderId)) {
             $order = Order::create();
             session(['orderId' => $order->id]);
         } else {
-            $order = Order::find($orderId);
-        }
+            $order = Order::findorFail($orderId);
+        }*/
 
-        if ($order->products->contains($productId)) {
-            $pivotRow = $order->products()->where('product_id', $productId)->first()->pivot;
+        // if ($order->products->contains($product->id/*$productId*/)) {
+            // $pivotRow = $order->products()->where('product_id', $product->id/*$productId*/)->first()->pivot;
             //  dd($pivotRow);
-            $pivotRow->count++;
-            $pivotRow->update();
+            // $pivotRow->count++;
+            // $pivotRow->update();
             //  dd($pivotRow);
-        } else {
-            $order->products()->attach($productId);
-        }
+        // } else {
+            // $order->products()->attach($product->id/*$productId*/);
+        // }
 
         // lesson 11
-        if (Auth::check()) {
+        /*if (Auth::check()) {
             $order->user_id = Auth::id();
             $order->save();
-        }
+        }*/
 
-
-        $product = Product::find($productId);
+        // lesson 23 убрали, т.к продук добавле через иньекцию Product $product
+        // $product = Product::find($productId);
 
         // lesson 20
-        Order::changeFullSum($product->price);
+        // Order::changeFullSum($product->price);
 
-        session()->flash('success', 'Добавлен товар ' . $product->name);
+        if ($result) {
+            session()->flash('success', 'Добавлен товар ' . $product->name);
+        } else  {
+            session()->flash('warning', 'Товар ' . $product->name . ' в большем количестве не доступен для заказа');
+        }
 
         //  dump($order->products);
         //  dump($order);
         return redirect()->route('basket');
     }
-    public function basketRemove($productId)
+    public function basketRemove(Product $product/*$productId*/)
     {
-        $orderId = session('orderId');
-        if (is_null($orderId)) {
+        // lesson 23
+        (new Basket())->removeProduct($product);
+
+        // $orderId = session('orderId');
+        /*if (is_null($orderId)) {
         //  $orderId = Order::all()->first()->id;
         //  $order = Order::findOrFail($orderId);
         //  $order->products()->detach($productId);
             return redirect()->route('basket');
-        }
-        $order = Order::find($orderId);
+        }*/
+        // $order = Order::findOrFail($orderId);
 
-        if ($order->products->contains($productId)) {
-            $pivotRow = $order->products()->where('product_id', $productId)->first()->pivot;
-            if ($pivotRow->count < 2) {
-                $order->products()->detach($productId);
-            } else {
-                $pivotRow->count--;
-                $pivotRow->update();
-            }
-        }
+        // if ($order->products->contains($product->id/*$productId*/)) {
+            // $pivotRow = $order->products()->where('product_id', $product->id/*$productId*/)->first()->pivot;
+            // if ($pivotRow->count < 2) {
+                // $order->products()->detach($product->id/*$productId*/);
+              // } else {
+                // $pivotRow->count--;
+                // $pivotRow->update();
+            // }
+        // }
 
-        $product = Product::find($productId);
+        // lesson 22
+        // $product = Product::find($productId);
 
         // lesson 20
-        Order::changeFullSum(-$product->price);
+        // Order::changeFullSum(-$product->price);
 
         session()->flash('warning', 'Удален товар ' . $product->name);
         return redirect()->route('basket');

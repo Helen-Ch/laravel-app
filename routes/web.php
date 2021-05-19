@@ -68,7 +68,9 @@ Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
 Route::group(
     ['prefix' => 'basket'],
     function () {
-        Route::post('/add/{id}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
+        //Route::post('/add/{id}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
+        //lesson 22 injection
+        Route::post('/add/{product}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
 
         Route::group(
             ['middleware' => 'basket_not_empty'],
