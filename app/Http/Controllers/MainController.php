@@ -80,7 +80,7 @@ class MainController extends Controller
         // dd($product->reviews);
 
         // lesson 22
-        $product = Product::withTrashed()->byCode($productCode)->first();
+        $product = Product::withTrashed()->byCode($productCode)->firstOrFail();
 
         return view('product', ['product' => $product]);
     }
