@@ -44,8 +44,11 @@ class BasketController extends Controller
             session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');
         }*/
 
+        // lesson 24
+        $email = Auth::check() ? Auth::user()->email : $request->email;
+
         // lesson 23
-        if ((new Basket())->saveOrder($request->name, $request->phone)) {
+        if ((new Basket())->saveOrder($request->name, $request->phone, $email)) {
             session()->flash('success', 'Ваш заказ принят в обработку!');
         } else {
             // session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');

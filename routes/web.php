@@ -77,7 +77,7 @@ Route::group(
             function () {
                 Route::get('/', 'App\Http\Controllers\BasketController@basket')->name('basket');
                 Route::get('/place', 'App\Http\Controllers\BasketController@basketPlace')->name('basket-place');
-                Route::post('/remove/{id}', '\App\Http\Controllers\BasketController@basketremove')->name(
+                Route::post('/remove/{product}', '\App\Http\Controllers\BasketController@basketremove')->name(
                     'basket-remove'
                 );
                 Route::post('/place', 'App\Http\Controllers\BasketController@basketConfirm')->name('basket-confirm');
