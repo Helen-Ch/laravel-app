@@ -23,71 +23,84 @@ Route::get('/dashboard', function () {
 */
 require __DIR__ . '/auth.php';
 
+// lesson 26
+Route::get('locale/{locale}', 'App\Http\Controllers\MainController@changeLocale')->name('locale');
+
 Route::get('reset', '\App\Http\Controllers\ResetController@reset')->name('reset');
 
 Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('get-logout');
+
 //laravel-ui auth разделить редирект для админа и обычных пользователей
 Route::get('redirects', 'App\Http\Controllers\MainController@redirectTo');
-Route::middleware('auth')->group(
-    function () {
-        Route::group(
-            [
-                'namespace' => 'App\Http\Controllers\Person',
-                'prefix' => 'person',
-                'as' => 'person.'
-            ],
-            function () {
-                Route::get('/orders', 'OrderController@index')->name('orders.index');
-                Route::get('/orders/{order}', 'OrderController@show')->name('orders.show');
-            }
-        );
 
-        Route::group(
-            [
-                'namespace' => 'App\Http\Controllers\Admin',
-                'prefix' => 'admin',
-            ],
+// lesson 26
+Route::middleware(['set_locale'])->group(
+    function () {
+        Route::middleware('auth')->group(
             function () {
                 Route::group(
-                    ['middleware' => 'is_admin'],
+                    [
+                        'namespace' => 'App\Http\Controllers\Person',
+                        'prefix' => 'person',
+                        'as' => 'person.'
+                    ],
                     function () {
-                        Route::get('/orders', 'OrderController@index')->name('home');
+                        Route::get('/orders', 'OrderController@index')->name('orders.index');
                         Route::get('/orders/{order}', 'OrderController@show')->name('orders.show');
                     }
                 );
 
-                Route::resource('categories', 'CategoryController');
-                Route::resource('products', 'ProductController');
+                Route::group(
+                    [
+                        'namespace' => 'App\Http\Controllers\Admin',
+                        'prefix' => 'admin',
+                    ],
+                    function () {
+                        Route::group(
+                            ['middleware' => 'is_admin'],
+                            function () {
+                                Route::get('/orders', 'OrderController@index')->name('home');
+                                Route::get('/orders/{order}', 'OrderController@show')->name('orders.show');
+                            }
+                        );
+
+                        Route::resource('categories', 'CategoryController');
+                        Route::resource('products', 'ProductController');
+                    }
+                );
             }
         );
-    }
-);
 
-Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
-
-Route::group(
-    ['prefix' => 'basket'],
-    function () {
-        //Route::post('/add/{id}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
-        //lesson 22 injection
-        Route::post('/add/{product}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
+        Route::get('/', 'App\Http\Controllers\MainController@index')->name('main');
 
         Route::group(
-            ['middleware' => 'basket_not_empty'],
+            ['prefix' => 'basket'],
             function () {
-                Route::get('/', 'App\Http\Controllers\BasketController@basket')->name('basket');
-                Route::get('/place', 'App\Http\Controllers\BasketController@basketPlace')->name('basket-place');
-                Route::post('/remove/{product}', '\App\Http\Controllers\BasketController@basketremove')->name(
-                    'basket-remove'
+                //Route::post('/add/{id}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
+                //lesson 22 injection
+                Route::post('/add/{product}', '\App\Http\Controllers\BasketController@basketAdd')->name('basket-add');
+
+                Route::group(
+                    ['middleware' => 'basket_not_empty'],
+                    function () {
+                        Route::get('/', 'App\Http\Controllers\BasketController@basket')->name('basket');
+                        Route::get('/place', 'App\Http\Controllers\BasketController@basketPlace')->name('basket-place');
+                        Route::post('/remove/{product}', '\App\Http\Controllers\BasketController@basketremove')->name(
+                            'basket-remove'
+                        );
+                        Route::post('/place', 'App\Http\Controllers\BasketController@basketConfirm')->name(
+                            'basket-confirm'
+                        );
+                    }
                 );
-                Route::post('/place', 'App\Http\Controllers\BasketController@basketConfirm')->name('basket-confirm');
             }
         );
+
+        Route::get('/categories', 'App\Http\Controllers\MainController@categories')->name('categories');
+        Route::get('/{category}', 'App\Http\Controllers\MainController@category')->name('category');
+        Route::get('/{category}/{product?}', 'App\Http\Controllers\MainController@product')->name('product');
+        Route::post('subscription/{product}', 'App\Http\Controllers\MainController@subscribe')->name('subscription');
+
+        Route::resource('reviews', 'App\Http\Controllers\ReviewController');
     }
 );
-
-Route::get('/categories', 'App\Http\Controllers\MainController@categories')->name('categories');
-Route::get('/{category}', 'App\Http\Controllers\MainController@category')->name('category');
-Route::get('/{category}/{product?}', 'App\Http\Controllers\MainController@product')->name('product');
-
-Route::resource('reviews', 'App\Http\Controllers\ReviewController');

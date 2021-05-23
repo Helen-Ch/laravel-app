@@ -49,10 +49,16 @@ class BasketController extends Controller
 
         // lesson 23
         if ((new Basket())->saveOrder($request->name, $request->phone, $email)) {
-            session()->flash('success', 'Ваш заказ принят в обработку!');
+            // session()->flash('success', 'Ваш заказ принят в обработку!');
+
+            // lesson 26
+            session()->flash('success', __('basket.you_order_confirmed'));
         } else {
             // session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');
-            session()->flash('warning', 'Товар не доступен для заказа в полном объеме');
+            // session()->flash('warning', 'Товар не доступен для заказа в полном объеме');
+
+            // lesson 26
+            session()->flash('warning', __('basket.you_cant_order_more'));
         }
 
         Order::eraseOrderSum();
