@@ -44,6 +44,15 @@
                 </div>
                 <br>
                 <div class="input-group row">
+                    <label for="name_en" class="col-sm-2 col-form-label">Название en: </label>
+                    <div class="col-sm-6">
+                        @include('auth.layouts.error', ['fieldName' => 'name_en'])
+                        <input type="text" class="form-control" name="name_en" id="name_en"
+                               value="@isset($product){{ $product->name_en }}@endisset">
+                    </div>
+                </div>
+                <br>
+                <div class="input-group row">
                     <label for="category_id" class="col-sm-2 col-form-label">Категория: </label>
                     <div class="col-sm-6">
                         @include('auth.layouts.error', ['fieldName' => 'category_id'])
@@ -66,7 +75,16 @@
                     <div class="col-sm-6">
                         @include('auth.layouts.error', ['fieldName' => 'description'])
                         <textarea name="description" id="description" cols="72"
-                                          rows="7">@isset($product){{ $product->description }}@endisset</textarea>
+                                  rows="7">@isset($product){{ $product->description }}@endisset</textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="input-group row">
+                    <label for="description_en" class="col-sm-2 col-form-label">Описание en: </label>
+                    <div class="col-sm-6">
+                        @include('auth.layouts.error', ['fieldName' => 'description_en'])
+                        <textarea name="description_en" id="description_en" cols="72"
+                                  rows="7">@isset($product){{ $product->description_en }}@endisset</textarea>
                     </div>
                 </div>
                 <br>
@@ -88,12 +106,12 @@
                     </div>
                 </div>
                 <div class="input-group row">
-                <label for="count" class="col-sm-2 col-form-label">Количество: </label>
-                <div class="col-sm-2">
-                    @include('auth.layouts.error', ['fieldName' => 'count'])
-                    <input type="text" class="form-control" name="count" id="count"
-                           value="@isset($product){{ $product->count }}@endisset">
-                </div>
+                    <label for="count" class="col-sm-2 col-form-label">Количество: </label>
+                    <div class="col-sm-2">
+                        @include('auth.layouts.error', ['fieldName' => 'count'])
+                        <input type="text" class="form-control" name="count" id="count"
+                               value="@isset($product){{ $product->count }}@endisset">
+                    </div>
                 </div>
                 <br>
                 @foreach ([
