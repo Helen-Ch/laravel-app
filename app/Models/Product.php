@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ class Product extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Translatable;
 
     // lesson 19 error for debug
     // protected $table = 'product'; // неправильное название таблицы products
@@ -21,7 +23,20 @@ class Product extends Model
         //  dd($category);
     }*/
 
-    protected $fillable = ['category_id', 'name', 'code', 'description', 'image', 'price', 'hit', 'new', 'recommend', 'count'];
+    protected $fillable = [
+        'category_id',
+        'name',
+        'code',
+        'description',
+        'image',
+        'price',
+        'hit',
+        'new',
+        'recommend',
+        'count',
+        'name_en',
+        'description_en',
+    ];
 
     public function category()
     {
@@ -47,15 +62,18 @@ class Product extends Model
     }
 
     // lesson 20
-    public function scopeHit($query) {
+    public function scopeHit($query)
+    {
         return $query->where('hit', 1);
     }
 
-    public function scopeNew($query) {
+    public function scopeNew($query)
+    {
         return $query->where('new', 1);
     }
 
-    public function scopeRecommend($query) {
+    public function scopeRecommend($query)
+    {
         return $query->where('recommend', 1);
     }
 

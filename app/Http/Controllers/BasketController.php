@@ -118,9 +118,9 @@ class BasketController extends Controller
         // Order::changeFullSum($product->price);
 
         if ($result) {
-            session()->flash('success', 'Добавлен товар ' . $product->name);
+            session()->flash('success', 'Добавлен товар ' . $product->__('name'));
         } else  {
-            session()->flash('warning', 'Товар ' . $product->name . ' в большем количестве не доступен для заказа');
+            session()->flash('warning', 'Товар ' . $product->__('name') . ' в большем количестве не доступен для заказа');
         }
 
         //  dump($order->products);
@@ -157,7 +157,7 @@ class BasketController extends Controller
         // lesson 20
         // Order::changeFullSum(-$product->price);
 
-        session()->flash('warning', 'Удален товар ' . $product->name);
+        session()->flash('warning', 'Удален товар ' . $product->__('name'));
         return redirect()->route('basket');
     }
 }

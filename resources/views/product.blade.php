@@ -3,15 +3,15 @@
 @section('title', 'Товар')
 
 @section('content')
-    <h1>{{ $product->name }}</h1>
+    <h1>{{ $product->__('name') }}</h1>
     <h2>{{ $product->category->name }}</h2>
     <p>Цена: <b>{{ $product->price }} руб.</b></p>
     <div>
         <div class="thumbnail" style="max-width: 25%; margin: 0 auto;">
-            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->__('name') }}">
         </div>
     </div>
-    <p>{{ $product->description }}</p>
+    <p>{{ $product->__('description') }}</p>
     @if($product->isAvailable())
         <form action="{{ route('basket-add', $product) }}" method="POST">
             @csrf

@@ -20,7 +20,12 @@ class ProductController extends Controller
     {
         // $products = Product::get();
         // lesson 17
-        $products = Product::paginate(10);
+        ///$products = Product::paginate(10);
+
+        // lesson 19, 20 чтобы убрать дублирющиеся запросы на странице всех товаров
+        $productsQuery = Product::with('category');
+        $products = $productsQuery->paginate(10);
+
         return  view('auth.products.index', compact('products'));
     }
 
