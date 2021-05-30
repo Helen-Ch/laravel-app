@@ -25,6 +25,8 @@ require __DIR__ . '/auth.php';
 
 // lesson 26
 Route::get('locale/{locale}', 'App\Http\Controllers\MainController@changeLocale')->name('locale');
+// lesson 28
+Route::get('currency/{currency}', 'App\Http\Controllers\MainController@changeCurrency')->name('currency');
 
 Route::get('reset', '\App\Http\Controllers\ResetController@reset')->name('reset');
 
