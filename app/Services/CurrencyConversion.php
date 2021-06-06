@@ -26,6 +26,23 @@ class CurrencyConversion
         return self::$container;
     }
 
+    public static function getCurrencyFromSession()
+    {
+        return session('currency', 'RUB');
+    }
+
+    public static function getCurrentCurrencyFromSession()
+    {
+        self::loadContainer();
+        $currencyCode = self::getCurrencyFromSession();
+
+        foreach (self::$container as $currency) {
+            if ($currency->code === $currencyCode) {
+                return $currency;
+            }
+        }
+    }
+
     public static function convert($sum, $originCurrencyCode = 'RUB', $targetCurrencyCode = null)
     {
         self::loadContainer();
@@ -40,7 +57,9 @@ class CurrencyConversion
         }
 
         if (is_null($targetCurrencyCode)) {
-            $targetCurrencyCode = session('currency', 'RUB');
+            // $targetCurrencyCode = session('currency', 'RUB');
+            // lesson 30
+            $targetCurrencyCode = self::getCurrencyFromSession();
         }
 //        $targetCurrency = Currency::byCode($targetCurrencyCode)->first();
         $targetCurrency = self::$container[$targetCurrencyCode];
@@ -55,8 +74,10 @@ class CurrencyConversion
     public static function getCurrencySymbol()
     {
         self::loadContainer();
-//        $currency = Currency::byCode(session('currency', 'RUB'))->first();
-        $currencyFromSession = session('currency', 'RUB');
+        // $currency = Currency::byCode(session('currency', 'RUB'))->first();
+        // $currencyFromSession = session('currency', 'RUB');
+        // lesson 30
+        $currencyFromSession = self::getCurrencyFromSession();
 
         $currency = self::$container[$currencyFromSession];
         return $currency->symbol;

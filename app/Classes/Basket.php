@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Mail\OrderCreated;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\CurrencyConversion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,7 +21,7 @@ class Basket
      */
     public function __construct(bool $createOrder = false)
     {
-        $orderId = session('orderId');
+        /*$orderId = session('orderId');
         if (is_null($orderId) && $createOrder) {
             $data = [];
             if (Auth::check()) {
@@ -31,6 +32,20 @@ class Basket
             session(['orderId' => $this->order->id]);
         } else {
             $this->order = Order::findOrFail($orderId);
+        }*/
+        // lesson 30
+        $order = session('order');
+        if (is_null($order) && $createOrder) {
+            $data = [];
+            if (Auth::check()) {
+                $data['user_id'] = Auth::id();
+            }
+            $data['currency_id'] = CurrencyConversion::getCurrentCurrencyFromSession();
+
+            $this->order = new Order($data);
+            session(['order' => $this->order]);
+        } else {
+            $this->order = $order;
         }
     }
 
@@ -111,6 +126,8 @@ class Basket
             if ($product->count == 0) {
                 return  false;
             }
+            // $this->order->products()->attach($product->id);
+            // lesson 30
             $this->order->products()->attach($product->id);
         }
 
