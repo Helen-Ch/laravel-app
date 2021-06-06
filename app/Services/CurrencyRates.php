@@ -23,9 +23,15 @@ class CurrencyRates
             throw new \UnexpectedValueException('There is a problem with currency service');
         }
 
-        $rates = json_decode($response->getBody()->getContents(), true)['results'];
+        /*$rates = json_decode($response->getBody()->getContents(), true)['results'];
         foreach ($rates as $rate) {
             $result[$rate['fr']] = $rate['val'];
+        }*/
+        $rates = json_decode($response->getBody()->getContents(), true);
+        // dd($rates);
+        foreach ($rates as $key=>$val) {
+            $key = str_replace('_RUB', '', $key);
+            $result[$key] = $val;
         }
 
         foreach (CurrencyConversion::getCurrencies() as $currency) {

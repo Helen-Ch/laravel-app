@@ -16,16 +16,17 @@
             </tr>
             </thead>
             <tbody>
-{{--            @foreach($order->products as $product)--}}
-            @foreach($order->products()->with('category')->get() as $product)
+            @foreach($order->products as $product)
+{{--            @foreach($order->products()->with('category')->get() as $product)--}}
                 <tr>
                     <td>
                         <a href="{{ route('product', [$product->category->code, $product->code]) }}">
-                            <img height="56px" src="{{ Storage::url($product->image) }}">
+                            <img height="56px" src="{{ Storage::url($product->image) }}" alt="">
                             {{ $product->__('name') }}
                         </a>
                     </td>
-                    <td><span class="badge">{{ $product->pivot->count }}</span>
+{{--                    <td><span class="badge">{{ $product->pivot->count }}</span>--}}
+                    <td><span class="badge">{{ $product->countInOrder ?? 1 }}</span>
                         <div class="btn-group form-inline">
                             <form action="{{ route('basket-remove', $product) }}" method="POST">
                                 <button type="submit" class="btn btn-danger"
@@ -42,7 +43,8 @@
                         </div>
                     </td>
                     <td>{{ $product->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
-                    <td>{{ $product->getPriceForCount() }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+{{--                    <td>{{ $product->getPriceForCount() }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>--}}
+                    <td>{{ $product->price * ($product->countInOrder ?? 1) }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
                 </tr>
             @endforeach
             <tr>
