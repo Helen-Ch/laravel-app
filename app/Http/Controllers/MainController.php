@@ -52,13 +52,19 @@ class MainController extends Controller
         }
 
         $products = $productsQuery->paginate(6)->withQueryString();
+
+        // lesson 31
+        // $categories = Category::get();
+        // return view('main', compact('products', 'categories'));
         return view('main', compact('products'));
     }
 
     public function categories()
     {
-        $categories = Category::get();
-        return view('categories', compact('categories'));
+        /*$categories = Category::get();
+        return view('categories', compact('categories'));*/
+        // lesson 31
+        return view('categories');
     }
 
     public function category($code)

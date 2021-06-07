@@ -176,7 +176,7 @@ class Basket
             if ($product->count == 0) {
                 return  false;
             }
-
+            $product->countInOrder = 1;
             $this->order->products->push($product);
         }
 
