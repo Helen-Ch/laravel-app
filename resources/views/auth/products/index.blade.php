@@ -20,12 +20,13 @@
                 <th>
                     Категория
                 </th>
-                <th>
-                    Цена
-                </th>
-                <th>
-                    Количество
-                </th>
+                {{--                <th>--}}
+                {{--                    Цена--}}
+                {{--                </th>--}}
+                {{--                <th>--}}
+                {{--                    Количество--}}
+                {{--                </th>--}}
+                <th>Количество товарных предложений</th>
                 <th>
                     Действия
                 </th>
@@ -36,8 +37,9 @@
                     <td>{{ $product->code }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->count }}</td>
+{{--                    <td>{{ $product->price }}</td>--}}
+{{--                    <td>{{ $product->count }}</td>--}}
+                    <td></td>
                     <td>
                         <div class="btn-group" role="group">
                             <form action="{{ route('products.destroy', $product) }}" method="POST">
