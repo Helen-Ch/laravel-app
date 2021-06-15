@@ -20,7 +20,8 @@
         @endif
         <div class="caption">
             <h3>{{ $product->__('name') }}</h3>
-            <p>{{ $product->price }} руб.</p>
+{{--            <p>{{ $product->price }} руб.</p>--}}
+            <p>{{ $product->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</p>
             <form action="{{ route('basket-add', $product) }}" method="POST">
                 @if($product->isAvailable())
                 <button type="submit" class="btn btn-primary" role="button">В корзину</button>

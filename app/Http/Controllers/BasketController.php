@@ -61,7 +61,10 @@ class BasketController extends Controller
             session()->flash('warning', __('basket.you_cant_order_more'));
         }
 
-        Order::eraseOrderSum();
+        // lesson 30
+        //Order::eraseOrderSum();
+
+
 
         return redirect()->route('main');
     }

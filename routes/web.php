@@ -25,6 +25,8 @@ require __DIR__ . '/auth.php';
 
 // lesson 26
 Route::get('locale/{locale}', 'App\Http\Controllers\MainController@changeLocale')->name('locale');
+// lesson 28
+Route::get('currency/{currency}', 'App\Http\Controllers\MainController@changeCurrency')->name('currency');
 
 Route::get('reset', '\App\Http\Controllers\ResetController@reset')->name('reset');
 
@@ -66,6 +68,9 @@ Route::middleware(['set_locale'])->group(
 
                         Route::resource('categories', 'CategoryController');
                         Route::resource('products', 'ProductController');
+                        Route::resource('products/{product}/skus', 'SkuController');
+                        Route::resource('properties', 'PropertyController');
+                        Route::resource('properties/{property}/property-options', 'PropertyOptionController');
                     }
                 );
             }

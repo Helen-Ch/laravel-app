@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductsFilterRequest;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Category;
+use App\Models\Currency;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Subscription;
@@ -51,13 +52,19 @@ class MainController extends Controller
         }
 
         $products = $productsQuery->paginate(6)->withQueryString();
+
+        // lesson 31
+        // $categories = Category::get();
+        // return view('main', compact('products', 'categories'));
         return view('main', compact('products'));
     }
 
     public function categories()
     {
-        $categories = Category::get();
-        return view('categories', compact('categories'));
+        /*$categories = Category::get();
+        return view('categories', compact('categories'));*/
+        // lesson 31
+        return view('categories');
     }
 
     public function category($code)
@@ -122,6 +129,13 @@ class MainController extends Controller
         App::setLocale($locale);
         // $currentLocale = App::getLocale();
         // dd($currentLocale);
+        return redirect()->back();
+    }
+
+    public function changeCurrency($currencyCode)
+    {
+        $currency = Currency::byCode($currencyCode)->firstOrFail();
+        session(['currency' => $currency->code]);
         return redirect()->back();
     }
 }

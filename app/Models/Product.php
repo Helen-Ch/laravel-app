@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Translatable;
+use App\Services\CurrencyConversion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,6 +42,18 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function skus()
+    {
+        return $this->hasMany(Sku::class);
+    }
+
+    public function properties()
+    {
+        // return $this->belongsToMany(Property::class);
+        // lesson 34
+        return $this->belongsToMany(Property::class, 'property_product')->withTimestamps();
     }
 
     public function getPriceForCount()
@@ -113,4 +126,8 @@ class Product extends Model
         return $query->where('code', $code);
     }
 
+    public function getPriceAttribute($value)
+    {
+        return round(CurrencyConversion::convert($value), 2);
+    }
 }

@@ -9,17 +9,27 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'currency_id', 'sum'];
 
-    public  function  products()
+    public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('count')->withTimestamps();
+        // return $this->belongsToMany(Product::class)->withPivot('count')->withTimestamps();
+        // lesson 30
+        return $this->belongsToMany(Product::class)->withPivot(['count', 'price'])->withTimestamps();
+    }
+
+    // lesson 30
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     // lesson 20
-    public function scopeActive($query) {
+    public function scopeActive($query)
+    {
         return $query->where('status', 1);
     }
+
     // lesson 20
     public function calculateFullSum()
     {
@@ -30,18 +40,20 @@ class Order extends Model
         return $sum;
     }
 
-    public static function eraseOrderSum()
+    // lesson 30
+    /*public static function eraseOrderSum()
     {
         session()->forget('full_order_sum');
-    }
+    }*/
 
+    /* lesson 30 убираем хранение в сессии
     public static function changeFullSum($changeSum)
     {
         $sum = self::getFullSum() + $changeSum;
         session(['full_order_sum' => $sum]);
-    }
+    }*/
 
-    public static function getFullSum()
+    public /*static*/ function getFullSum()
     {
         /*$sum = 0;
         foreach ($this->products as $product) {
@@ -49,12 +61,19 @@ class Order extends Model
         }
         return $sum; */
         // lesson 20
-        return session('full_order_sum', 0);
+        //return session('full_order_sum', 0);
+
+        // lesson30
+        $sum = 0;
+        foreach ($this->products as $product) {
+            $sum += $product->price * ($product->countInOrder ?? 1);
+        }
+        return $sum;
     }
 
     public function saveOrder($name, $phone)
     {
-        if ($this->status == 0) {
+        /*if ($this->status == 0) {
             $this->name = $name;
             $this->phone = $phone;
             $this->status = 1;
@@ -63,6 +82,22 @@ class Order extends Model
             return true;
         } else {
             return false;
+        }*/
+
+        // lesson30
+        $this->name = $name;
+        $this->phone = $phone;
+        $this->status = 1;
+        $this->sum = $this->getFullSum();
+        $products = $this->products;
+        $this->save();
+        foreach ($products as $productInOrder) {
+            $this->products()->attach($productInOrder, [
+                'count' => $productInOrder->countInOrder,
+                'price' => $productInOrder->price,
+            ]);
         }
+        session()->forget('order');
+        return true;
     }
 }

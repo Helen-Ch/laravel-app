@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Models\Property;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -37,7 +37,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::get();
-        return view('auth.products.form' ,compact('categories'));
+        $properties = Property::get();
+        return view('auth.products.form' ,compact('categories', 'properties'));
     }
 
     /**
@@ -80,7 +81,7 @@ class ProductController extends Controller
     {
         $categories = Category::get();
         $properties = Property::get();
-        return view('auth.products.form', compact('product','categories'));
+        return view('auth.products.form', compact('product','categories', 'properties'));
     }
 
     /**
@@ -105,6 +106,12 @@ class ProductController extends Controller
                 $params[$fieldName] = 0;
             }
         }
+
+        // lesson 34
+        // проверяем, что пришло в массиве свойств из селекта
+        // dd($request->property_id);
+        // синхронизируем то, что есть, с тем, что пришло
+        $product->properties()->sync($request->property_id);
 
         $product->update($params);
         return redirect()->route('products.index');
