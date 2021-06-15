@@ -21,7 +21,7 @@
                     Действия
                 </th>
             </tr>
-            @foreach($propertyOptions as $propertyOption)
+            @foreach($property->propertyOptions as $propertyOption)
                 <tr>
                     <td>{{ $propertyOption->id }}</td>
                     <td>{{ $property->name }}</td>

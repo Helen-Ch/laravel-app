@@ -16,8 +16,10 @@ class Sku extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function property_options()
+    // lesson 33, 34
+    public function propertyOptions()
     {
-        return $this->belongsToMany(PropertyOption::class);
+        // подставляем сами свое название таблицы, т.к. названия в нашей таблице связей не в алфавитном порядке, а laravel ищет таблицу property_option_sku
+        return $this->belongsToMany(PropertyOption::class, 'sku_property_option')->withTimestamps();
     }
 }
