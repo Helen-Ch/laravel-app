@@ -20,19 +20,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($products as $product)
+{{--                        @foreach ($products as $product)--}}
+                        @foreach ($skus as $sku)
                             <tr>
                                 <td>
-                                    <a href="{{ route('product', [$product->category->code, $product->code]) }}">
+                                    <a href="{{ route('sku', [$sku->product->category->code, $sku->product->code, $sku]) }}">
                                         <img height="56px"
-                                             src="{{ Storage::url($product->image) }}">
-                                        {{ $product->name }}
+                                             src="{{ Storage::url($sku->product->image) }}" alt="">
+                                        {{ $sku->product->name }}
                                     </a>
                                 </td>
-                                <td><span class="badge">{{ $product->pivot->count }}</span></td>
-                                <td>{{ $product->pivot->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                                <td><span class="badge">{{ $sku->pivot->count }}</span></td>
+                                <td>{{ $sku->pivot->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
 {{--                                <td>{{ $product->getPriceForCount()}} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>--}}
-                                <td>{{ $product->pivot->price * $product->pivot->count }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                                <td>{{ $sku->pivot->price * $sku->pivot->count }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
                             </tr>
                         @endforeach
                         <tr>

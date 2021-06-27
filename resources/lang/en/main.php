@@ -2,7 +2,7 @@
 
 return [
     'online_shop' => 'Online Shop',
-//    'all_products' => 'All products',
+    'all_products' => 'All products',
     'product' => 'Product',
     'categories' => 'Categories',
     'all_categories' => 'All categories',

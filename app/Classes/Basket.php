@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Mail\OrderCreated;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Sku;
 use App\Services\CurrencyConversion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -75,7 +76,7 @@ class Basket
         }*/
 
         // lesson 30
-        $products = collect([]);
+        /*$products = collect([]);
         foreach ($this->order->products as $orderProduct) {
             $product = Product::find($orderProduct->id);
             if ($orderProduct->count < $orderProduct->countInOrder) {
@@ -89,6 +90,22 @@ class Basket
 
         if ($updateCount) {
             $products->map->save(); // обновляем кол-во товаров, вместо foreach use map
+        }*/
+        // lesson 35
+        $skus = collect([]);
+        foreach ($this->order->skus as $orderSku) {
+            $sku = Sku::find($orderSku->id);
+            if ($orderSku->count < $orderSku->countInOrder) {
+                return  false;
+            }
+            if ($updateCount) {
+                $sku->count -= $orderSku->countInOrder;
+                $skus->push($sku);
+            }
+        }
+
+        if ($updateCount) {
+            $skus->map->save(); // обновляем кол-во товаров, вместо foreach use map
         }
         return true;
     }
@@ -118,7 +135,7 @@ class Basket
     {
         return $this->order->products()->where('product_id', $product->id)->first()->pivot;
     }*/
-
+    // lesson 35 заменяем на sku
     public function removeProduct(Product $product)
     {
         /*if ($this->order->products->contains($product->id)) {
@@ -144,7 +161,8 @@ class Basket
         }
     }
 
-    public function addProduct(Product $product)
+
+    /*public function addProduct(Product $product)
     {
         // dd($product->count); максимальное кол-во товара на склааде, pivotRow->count - количество товаров в заказе
         /*if ($this->order->products->contains($product->id)) {
@@ -166,7 +184,7 @@ class Basket
 
 
         // lesson 30
-        if ($this->order->products->contains($product)) {
+        /*if ($this->order->products->contains($product)) {
             $pivotRow = $this->order->products->where('id', $product->id)->first();
             if ($pivotRow->countInOrder >= $product->count) {
                 return false;
@@ -181,5 +199,37 @@ class Basket
         }
 
         return  true;
+    }*/
+
+    public function addSku(Sku $sku)
+    {
+        //dd($sku);
+        if ($this->order->skus->contains($sku)) {
+            $pivotRow = $this->order->skus->where('id', $sku->id)->first();
+            if ($pivotRow->countInOrder >= $sku->count) {
+                return false;
+            }
+            $pivotRow->countInOrder++;
+        } else {
+            if ($sku->count == 0) {
+                return  false;
+            }
+            $sku->countInOrder = 1;
+            $this->order->skus->push($sku);
+        }
+
+        return  true;
+    }
+
+    public function removeSku(Sku $sku)
+    {
+        if ($this->order->skus->contains($sku)) {
+            $pivotRow = $this->order->skus->where('id', $sku->id)->first();
+            if ($pivotRow->countInOrder < 2) {
+                $this->order->skus->pop($sku);
+            } else {
+                $pivotRow->countInOrder--;
+            }
+        }
     }
 }
