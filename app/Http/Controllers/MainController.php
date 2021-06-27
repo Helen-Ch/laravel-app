@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Currency;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Sku;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -31,8 +32,9 @@ class MainController extends Controller
         // dd($request->all()); //увидеть, какие параметры пришли а гет
 //        $productsQuery = Product::query();
 
+        // lesson 35
         // lesson 19
-        $productsQuery = Product::with('category');
+        /*$productsQuery = Product::with('category');
 
         if ($request->filled('price_from')) {
             $productsQuery->where('price', '>=', $request->price_from);
@@ -56,7 +58,30 @@ class MainController extends Controller
         // lesson 31
         // $categories = Category::get();
         // return view('main', compact('products', 'categories'));
-        return view('main', compact('products'));
+        return view('main', compact('products'));*/
+
+        //$skusQuery = Sku::query();
+        // фильтры, product.category потому что sku не видит category
+        $skusQuery = Sku::with('product', 'product.category');
+
+        if ($request->filled('price_from')) {
+            $skusQuery->where('price', '>=', $request->price_from);
+        }
+
+        if ($request->filled('price_to')) {
+            $skusQuery->where('price', '<=', $request->price_to);
+        }
+
+        foreach (['hit', 'new', 'recommend'] as $field) {
+            if ($request->has($field)) {
+                $skusQuery->whereHas('product', function($query) use ($field) {
+                    $query->$field();
+                });
+            }
+        }
+
+        $skus = $skusQuery->paginate(6)->withQueryString();
+        return view('main', compact('skus'));
     }
 
     public function categories()
@@ -76,7 +101,8 @@ class MainController extends Controller
         return view('category', compact('category'));
     }
 
-    public function product($category, $productCode)
+    // commented in lesson 35
+    /*public function product($category, $productCode)
     {
         // dd($product);
         // dump($product);
@@ -93,6 +119,21 @@ class MainController extends Controller
         $product = Product::withTrashed()->byCode($productCode)->firstOrFail();
 
         return view('product', ['product' => $product]);
+    }*/
+
+    // lesson 35, чтобы работала инъекция Sku $skus, в роуте нужно указать /{skus}
+    public function sku($categoryCode, $productCode, Sku $skus)
+    {
+        // lesson 35
+        // dd($skus);
+        if ($skus->product->code != $productCode) {
+            abort(404, 'Product not found');
+        }
+        if ($skus->product->category->code != $categoryCode) {
+            abort(404, 'Category not found');
+        }
+
+        return view('product', compact('skus'));
     }
 
     protected function redirectTo()
@@ -105,14 +146,26 @@ class MainController extends Controller
             return redirect()->route('main');
         }
     }
-
-    public function subscribe(SubscriptionRequest $request, Product $product)
+    // lesson 35
+    /*public function subscribe(SubscriptionRequest $request, Product $product)
     {
         // dd($product);
         Subscription::create(
             [
                 'email' => $request->email,
                 'product_id' => $product->id
+            ]
+        );
+        return redirect()->back()->with('success', 'Спасибо, мы сообщим Вам о поуступлении товара');
+    }*/
+
+    public function subscribe(SubscriptionRequest $request, Sku $skus)
+    {
+        // dd($product);
+        Subscription::create(
+            [
+                'email' => $request->email,
+                'sku_id' => $skus->id
             ]
         );
         return redirect()->back()->with('success', 'Спасибо, мы сообщим Вам о поуступлении товара');

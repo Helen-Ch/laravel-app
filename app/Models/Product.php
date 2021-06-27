@@ -55,14 +55,14 @@ class Product extends Model
         // lesson 34
         return $this->belongsToMany(Property::class, 'property_product')->withTimestamps();
     }
-
-    public function getPriceForCount()
+    // commented in lesson 35, moved to Sku model
+    /*public function getPriceForCount()
     {
         if (!is_null($this->pivot)) {
             return $this->pivot->count * $this->price;
         }
         return $this->price;
-    }
+    }*/
 
     public function reviews()
     {
@@ -115,11 +115,11 @@ class Product extends Model
         return $this->recommend === 1;
     }
 
-    // lesson 22
-    public function isAvailable()
+    // lesson 22, commented in lesson 35
+    /*public function isAvailable()
     {
         return !$this->trashed() && $this->count > 0;
-    }
+    }*/
 
     public function scopeByCode($query, $code)
     {

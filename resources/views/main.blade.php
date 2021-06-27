@@ -1,6 +1,6 @@
 @extends('layouts.master',['id' => 'common-home'])
 
-@section('title', 'Главная')
+@section('title', __('main.title'))
 
 @section('content')
     <h1>Все товары</h1>
@@ -38,10 +38,16 @@
             </div>
         </div>
     </form>
+{{--    <div class="row">--}}
+{{--        @foreach($products as $product)--}}
+{{--            @include('layouts.card', compact('product'))--}}
+{{--        @endforeach--}}
+{{--    </div>--}}
+{{--    {{ $products->links() }}--}}
     <div class="row">
-        @foreach($products as $product)
-            @include('layouts.card', compact('product'))
+        @foreach($skus as $sku)
+            @include('layouts.card', compact('sku'))
         @endforeach
     </div>
-    {{ $products->links() }}
+    {{ $skus->links() }}
 @endsection
