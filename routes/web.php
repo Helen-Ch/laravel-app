@@ -71,6 +71,7 @@ function () {
                         Route::resource('products/{product}/skus', 'SkuController');
                         Route::resource('properties', 'PropertyController');
                         Route::resource('properties/{property}/property-options', 'PropertyOptionController');
+                        Route::resource('coupons', 'CouponController');
                     }
                 );
             }
