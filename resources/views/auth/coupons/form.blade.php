@@ -84,7 +84,8 @@
                     <div class="col-sm-6">
                         @include('auth.layouts.error', ['fieldName' => 'expired_at'])
                         <input type="date" class="form-control" name="expired_at" id="expired_at"
-                               value="@isset($coupon->expired_at){{ $coupon->expired_at->format('d.m.Y') }}@endisset">
+                               value="@isset($coupon->expired_at)
+                               {{ $coupon->expired_at->format('Y-m-d') }}@endisset">
                     </div>
                 </div>
                 <br>

@@ -31,9 +31,12 @@
                                     </a>
                                 </td>
                                 <td><span class="badge">{{ $sku->pivot->count }}</span></td>
-                                <td>{{ $sku->pivot->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                                <?php /*<td>{{ $sku->pivot->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
 {{--                                <td>{{ $product->getPriceForCount()}} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>--}}
                                 <td>{{ $sku->pivot->price * $sku->pivot->count }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+*/?>
+                                <td>{{ $sku->pivot->price }} {{ $order->currency->symbol }}</td>
+                                <td>{{ $sku->pivot->price * $sku->pivot->count }} {{ $order->currency->symbol }}</td>
                             </tr>
                         @endforeach
                         <tr>
@@ -41,6 +44,12 @@
 {{--                            <td>{{ $order->getFullSum() }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>--}}
                             <td>{{ $order->sum }} {{ $order->currency->symbol }}</td>
                         </tr>
+                        @if($order->hasCoupon())
+                            <tr>
+                                <td colspan="3">Был использован купон:</td>
+                                <td><a href="{{ route('coupons.show', $order->coupon) }}">{{ $order->coupon->code }}</a></td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
                     <br>

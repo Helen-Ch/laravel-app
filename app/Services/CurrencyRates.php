@@ -29,10 +29,20 @@ class CurrencyRates
         }*/
         $rates = json_decode($response->getBody()->getContents(), true);
         // dd($rates);
-        foreach ($rates as $key=>$val) {
-            $key = str_replace('_RUB', '', $key);
-            $result[$key] = $val;
+        //foreach ($rates as $key=>$val) {
+        foreach ($rates['quotes'] as $key=>$val) {
+            if($key == 'USDRUB') {
+                $key = str_replace('RUB', '', $key);
+                $result[$key] = $val;
+                $tmpForEur = $val;
+            } elseif ($key == 'USDEUR' && !empty($tmpForEur)) {
+                $key = str_replace('USD', '', $key);
+                $result[$key] = $tmpForEur / $val;
+            }
+            //$key = str_replace('_RUB', '', $key);
+            //$result[$key] = $val;
         }
+        //dd($result);
 
         foreach (CurrencyConversion::getCurrencies() as $currency) {
             if (!$currency->isMain()) {

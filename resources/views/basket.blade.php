@@ -43,21 +43,46 @@
                             </form>
                         </div>
                     </td>
-                    <td>{{ $sku->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                    <?php /*<td>{{ $sku->price }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
 {{--                    <td>{{ $product->getPriceForCount() }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>--}}
-                    <td>{{ $sku->price * ($sku->countInOrder ?? 1) }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                    <td>{{ $sku->price * ($sku->countInOrder ?? 1) }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>*/?>
+
+                    <td>{{ $sku->price }} {{ $currencySymbol }}</td>
+                    <td>{{ $sku->price * $sku->countInOrder }} {{ $currencySymbol }}</td>
                 </tr>
             @endforeach
             <tr>
-                <td colspan="3">Общая стоимость:</td>
-                <td>{{ $order->getFullSum() }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>
+                <td colspan="3">@lang('basket.full_cost'):</td>
+{{--                <td>{{ $order->getFullSum() }} {{ App\Services\CurrencyConversion::getCurrencySymbol() }}</td>--}}
+                @if($order->hasCoupon())
+                    <td><strike>{{ $order->getFullSum(false) }}</strike>
+                        <b>{{ $order->getFullSum() }}</b> {{ $currencySymbol }}</td>
+                @else
+                    <td>{{ $order->getFullSum() }} {{ $currencySymbol }}</td>
+                @endif
             </tr>
             </tbody>
         </table>
+        @if(!$order->hasCoupon())
+            <div class="row">
+                <div class="form-inline pull-right">
+                    <form method="POST" action="{{ route('set-coupon') }}">
+                        @csrf
+                        <label for="coupon">@lang('basket.coupon.add_coupon'):</label>
+                        <input class="form-control" type="text" name="coupon">
+                        <button type="submit" class="btn btn-success">@lang('basket.coupon.apply')</button>
+                    </form>
+                </div>
+            </div>
+            @error('coupon')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        @else
+            <div>@lang('basket.coupon.your_coupon') {{ $order->coupon->code }}</div>
+        @endif
         <br>
         <div class="btn-group pull-right" role="group">
-            <a type="button" class="btn btn-success" href="{{ route('basket-place') }}">Оформить
-                заказ</a>
+            <a type="button" class="btn btn-success" href="{{ route('basket-place') }}">@lang('basket.place_order')</a>
         </div>
     </div>
 @endsection

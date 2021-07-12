@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\CurrencyConversion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -70,7 +71,8 @@ class Order extends Model
         session(['full_order_sum' => $sum]);
     }*/
 
-    public /*static*/ function getFullSum()
+    // lesson 39 $withCoupon = true
+    public /*static*/ function getFullSum($withCoupon = true)
     {
         /*$sum = 0;
         foreach ($this->products as $product) {
@@ -89,6 +91,12 @@ class Order extends Model
         foreach ($this->skus as $sku) {
             $sum += $sku->price * ($sku->countInOrder ?? 1);
         }
+
+        // lesson 39
+        if ($withCoupon && $this->hasCoupon()) {
+            $sum = $this->coupon->applyCost($sum, $this->currency);
+        }
+
         return $sum;
     }
 
@@ -120,6 +128,9 @@ class Order extends Model
             ]);
         }*/
         $skus = $this->skus;
+        // если поменять валюту в корзине, нужно получить новый айди валюты в ордере
+        $this->currency_id = CurrencyConversion::getCurrencyId();
+        //dd($skus, $this);
         $this->save();
         foreach ($skus as $skuInOrder) {
             $this->skus()->attach($skuInOrder, [
@@ -129,5 +140,11 @@ class Order extends Model
         }
         session()->forget('order');
         return true;
+    }
+
+    // lesson 39
+    public function hasCoupon()
+    {
+        return $this->coupon;
     }
 }

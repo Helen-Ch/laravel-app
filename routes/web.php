@@ -101,6 +101,8 @@ function () {
                         Route::post('/place', 'App\Http\Controllers\BasketController@basketConfirm')->name(
                             'basket-confirm'
                         );
+                        // lesson 39
+                        Route::post('coupon', 'App\Http\Controllers\BasketController@setCoupon')->name('set-coupon');
                     }
                 );
             }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Basket;
+use App\Http\Requests\AddCouponRequest;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Sku;
@@ -44,6 +46,14 @@ class BasketController extends Controller
         } else {
             session()->flash('warning', 'Что-то пошло не так (, заказ не принят.');
         }*/
+
+        // lesson 39
+        $basket = new Basket();
+        if ($basket->getOrder()->hasCoupon() && !$basket->getOrder()->coupon->availableForUse()) {
+            $basket->clearCoupon();
+            session()->flash('warning', __('basket.coupon.not_available'));
+            return redirect()->route('basket');
+        }
 
         // lesson 24
         $email = Auth::check() ? Auth::user()->email : $request->email;
@@ -181,6 +191,20 @@ class BasketController extends Controller
 
         //session()->flash('warning', 'Удален товар ' . $product->__('name'));
         session()->flash('warning', 'Удален товар ' . $skus->product->__('name'));
+        return redirect()->route('basket');
+    }
+
+    public function setCoupon(AddCouponRequest $request)
+    {
+        $coupon = Coupon::where('code', $request->coupon)->first();
+
+        if ($coupon->availableForUse()) {
+            (new Basket())->setCoupon($coupon);
+            session()->flash('success', __('basket.coupon.coupon_added'));
+        } else {
+            session()->flash('warning', __('basket.coupon.not_available'));
+        }
+
         return redirect()->route('basket');
     }
 }

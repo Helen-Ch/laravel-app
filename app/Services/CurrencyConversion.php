@@ -99,4 +99,14 @@ class CurrencyConversion
             }
         }
     }
+
+    public static function getCurrencyId()
+    {
+        self::loadContainer();
+
+        $currencyFromSession = self::getCurrencyFromSession();
+
+        $currency = self::$container[$currencyFromSession];
+        return $currency->id;
+    }
 }

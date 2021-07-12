@@ -126,8 +126,9 @@ class Product extends Model
         return $query->where('code', $code);
     }
 
-    public function getPriceAttribute($value)
+    // lesson 39
+    /*public function getPriceAttribute($value)
     {
         return round(CurrencyConversion::convert($value), 2);
-    }
+    }*/
 }

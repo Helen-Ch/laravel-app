@@ -6,5 +6,8 @@ return [
     //'api_url_end' => '&compact=ultra&apiKey=d63614ff4314a41c4f50',
 
     // 'api_url' => 'https://free.currconv.com/api/v7/convert?apiKey=d63614ff4314a41c4f50&q=USD_RUB,EUR_RUB',
-    'api_url' => 'https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=aee669c0568b59171935',
+    // 503 - 'api_url' => 'https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=aee669c0568b59171935',
+
+    // free plan base currency only USD, so rate RUB-EUR is need to be get from USD-EUR rate
+    'api_url' => 'http://apilayer.net/api/live?access_key=150a5380dc80c5ab8ac1bed983c41b0c&currencies=RUB,EUR&source=USD&format=1',
 ];
