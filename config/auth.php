@@ -43,8 +43,11 @@ return [
 
         'api' => [
             'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
+            //'provider' => 'users',
+            // lesson 41
+            'provider' => 'merchants',
+            'hash' => true,
+            'storage_key' => 'token'
         ],
     ],
 
@@ -69,6 +72,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'merchants' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Merchant::class,
         ],
 
         // 'users' => [
