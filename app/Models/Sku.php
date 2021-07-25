@@ -13,10 +13,17 @@ class Sku extends Model
     use SoftDeletes;
 
     protected $fillable = ['product_id', 'count', 'price'];
+    protected $visible = ['id', 'count', 'price', 'product_name'];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    // lesson 40
+    public function scopeAvailable($query)
+    {
+        return $query->where('count', '>', 0);
     }
 
     // lesson 33, 34
@@ -44,5 +51,11 @@ class Sku extends Model
     public function getPriceAttribute($value)
     {
         return round(CurrencyConversion::convert($value), 2);
+    }
+    
+    // lesson 40
+    public function getProductNameAttribute()
+    {
+        return $this->product->name;
     }
 }
